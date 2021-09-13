@@ -1,0 +1,83 @@
+@font-face {
+    font-family: 'Roboto';
+    src: url('/assets/fonts/Roboto-Regular.ttf') format('truetype');
+    font-weight: normal;
+}
+
+#post-it *, #post-it *:before, #post-it *:after { margin: 0; padding: 0; box-sizing: border-box; }
+#post-it {
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+}
+#post-it .post-it {
+    position: fixed;
+    box-shadow: 5px 5px 5px 0px rgba(0,0,0,0.25);
+    overflow: auto;
+}
+#post-it .post-it::-webkit-scrollbar {
+    width: 5px;
+}
+#post-it .post-it::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.25);
+}
+#post-it .post-it .actions {
+    padding: 5px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+}
+#post-it .post-it.yellow {
+    background-color: #fff7d1;
+    border-color: #fff2ab;
+}
+#post-it .post-it.yellow .actions {
+    background-color: #fff2ab;
+}
+#post-it .post-it.green {
+    background-color: #e4f9e0;
+    border-color: #cbf1c4;
+}
+#post-it .post-it.green .actions {
+    background-color: #cbf1c4;
+}
+#post-it .post-it.blue {
+    background-color: #e2f1ff;
+    border-color: #cde9ff;
+}
+#post-it .post-it.blue .actions {
+    background-color: #cde9ff;
+}
+#post-it .post-it.pink {
+    background-color: #ffe4f1;
+    border-color: #ffcce5;
+}
+#post-it .post-it.pink .actions {
+    background-color: #ffcce5;
+}
+#post-it .post-it.purple {
+    background-color: #f2e6ff;
+    border-color: #e7cfff;
+}
+#post-it .post-it.purple .actions {
+    background-color: #e7cfff;
+}
+#post-it .post-it.gray {
+    background-color: #f3f2f1;
+    border-color: #e1dfdd;
+}
+#post-it .post-it.gray .actions {
+    background-color: #e1dfdd;
+}
+#post-it .post-it.black {
+    background-color: #696969;
+    border-color: #494745;
+    color: #ffffff;
+}
+#post-it .post-it.black .actions {
+    background-color: #494745;
+}
+#post-it .post-it.move {
+    user-select: none;
+}
