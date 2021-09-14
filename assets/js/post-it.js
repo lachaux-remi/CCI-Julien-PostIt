@@ -34,27 +34,35 @@ class PostItBoard {
     }
 
     load() {
-        let name = "postit=";
-        let decodedCookie = decodeURIComponent(document.cookie);
-        let ca = decodedCookie.split(';');
-        for(let i = 0; i <ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1);
-            }
-            if (c.indexOf(name) === 0) {
-                return JSON.parse(c.substring(name.length, c.length));
-            }
+        let postItStorage = localStorage.getItem('postIt')
+        if ( postItStorage !== null ) {
+            return JSON.parse(postItStorage)
         }
-        return [];
+
+        return [
+            {x:441,y:185,width:204,height:155,color:'gray',text:'Coucou'},
+            {x:626,y:298,width:176,height:151,color:'blue',text:'Bonjour'}
+        ]
     }
 
     save() {
-        const d = new Date();
-        d.setTime(d.getTime() + (3650*24*60*60*1000));
-        document.cookie = "postit=" + JSON.stringify(this.postItList.sort((a, b) => a.index - b.index).map(postIt => {
-            return {x: postIt.x, y: postIt.y, width: postIt.width, height: postIt.height, color: postIt.color, text: postIt.text}
-        })) + ";expires=" + d.toUTCString() + ";path=/";
+        localStorage.setItem(
+            'postIt',
+            JSON.stringify(
+                this.postItList
+                    .sort((a, b) => a.index - b.index)
+                    .map( postIt => {
+                        return {
+                            x: postIt.x,
+                            y: postIt.y,
+                            width: postIt.width,
+                            height: postIt.height,
+                            color: postIt.color,
+                            text: postIt.text
+                        }
+                    } )
+            )
+        )
     }
 
     postItActions = (e) => {
