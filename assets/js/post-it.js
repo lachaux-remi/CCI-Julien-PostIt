@@ -1,21 +1,27 @@
-// Couleur ( yellow, green, pink, purple, blue, gray, black )
-
+/**
+ * Post-it board class
+ */
 class PostItBoard {
+    /** @type {[PostIt]} */
     postItList = []
+    /** @type {PostIt|undefined} */
     drag = undefined
+    /** @type {PostIt|undefined} */
     resize = undefined
 
+    /**
+     * @param tagName {string} selector javascript
+     */
     constructor(tagName) {
         this.postItElement = document.querySelector(tagName)
         this.init()
     }
 
+    /**
+     * Initialize post-ip board
+     */
     init() {
         let index = 100
-        /*const t = [
-            {x:100,y:100,width:200,height:500,color:'blue',text:'Bonjour'},
-            {x:20,y:100,width:200,height:500,color:'gray',text:'Coucou'}
-        ]*/
         this.load().forEach(postItJson => {
             const postIt = new PostIt(this, this.postItList.length, postItJson.x, postItJson.y, postItJson.width, postItJson.height, postItJson.color, postItJson.text, index++)
             this.postItList.push(postIt)
@@ -33,6 +39,10 @@ class PostItBoard {
         this.postItElement.addEventListener('mousemove', this.postItActions, false)
     }
 
+    /**
+     * Load post-it form localstorage
+     * @returns {[{color: string, x: number, width: number, y: number, text: string, height: number}]}
+     */
     load() {
         let postItStorage = localStorage.getItem('postIt')
         if ( postItStorage !== null ) {
@@ -45,6 +55,9 @@ class PostItBoard {
         ]
     }
 
+    /**
+     * Save post-it list into localstorage
+     */
     save() {
         localStorage.setItem(
             'postIt',
@@ -65,21 +78,25 @@ class PostItBoard {
         )
     }
 
-    postItActions = (e) => {
+    /**
+     * Move and resize post-it event
+     * @param event {MouseEvent}
+     */
+    postItActions = event => {
         if (this.drag !== undefined) {
-            e.preventDefault();
+            event.preventDefault();
 
-            this.drag.x = this.drag.xOffset + e.clientX;
-            this.drag.y = this.drag.yOffset + e.clientY;
+            this.drag.x = this.drag.xOffset + event.clientX;
+            this.drag.y = this.drag.yOffset + event.clientY;
 
             const style = this.drag.postIt.style
             style.top = this.drag.y + 'px'
             style.left = this.drag.x + 'px'
         } else if ( this.resize !== undefined ) {
-            e.preventDefault();
+            event.preventDefault();
 
-            this.resize.width = e.clientX - this.resize.x + this.resize.xOffset
-            this.resize.height = e.clientY- this.resize.y + this.resize.yOffset
+            this.resize.width = event.clientX - this.resize.x + this.resize.xOffset
+            this.resize.height = event.clientY- this.resize.y + this.resize.yOffset
 
             if ( this.resize.width < 128 ) this.resize.width = 128
             if ( this.resize.height < 64 ) this.resize.height = 64
@@ -91,7 +108,23 @@ class PostItBoard {
     }
 }
 
+/**
+ * Post-it Class
+ */
 class PostIt {
+
+    /**
+     * Constructor for the post-it
+     * @param board {PostItBoard} Post-it board
+     * @param id {number} unique post-it id
+     * @param x {number} position x
+     * @param y {number} position y
+     * @param width{number} width post-it
+     * @param height{number} height post-it
+     * @param color {'yellow'|'green'|'pink'|'purple'|'blue'|'gray'|'black'} post-it color
+     * @param text {string} post-it content
+     * @param index {number} z-index css
+     */
     constructor(board, id, x, y, width, height, color, text, index) {
         this.board = board
         this.id = id
@@ -106,11 +139,17 @@ class PostIt {
         this.init()
     }
 
+    /**
+     * Create post-it {HTMLElement}
+     */
     init() {
         this.postIt = document.createElement('div')
         this.render()
     }
 
+    /**
+     * render post-it element
+     */
     render() {
         this.postIt.classList.add('post-it', this.color)
         const style = this.postIt.style
@@ -134,10 +173,11 @@ class PostIt {
             this.text = content.innerHTML
             this.board.save()
         }).observe(content, { subtree: true, characterData: true})
-
-        this.resizeIcon()
     }
 
+    /**
+     * Create {HTMLElement} all actions
+     */
     actionTools() {
         const actionBar = document.createElement('div')
         actionBar.classList.add('actions')
@@ -204,30 +244,41 @@ class PostIt {
         this.postIt.append(actionBar, resizeElement)
     }
 
-    resizeIcon() {
-    }
-
-    moveToggleOn = (e) => {
+    /**
+     * Toggle on the post-it move
+     * @param event {MouseEvent}
+     */
+    moveToggleOn = event => {
         this.postIt.classList.add('move')
-        this.xOffset = this.x - e.clientX
-        this.yOffset = this.y - e.clientY
+        this.xOffset = this.x - event.clientX
+        this.yOffset = this.y - event.clientY
         this.board.drag = this
     }
 
+    /**
+     * Toggle off the post-it move
+     */
     moveToggleOff = () => {
         this.postIt.classList.remove('move')
         this.board.drag = undefined
         this.board.save()
     }
 
-    resizeToggleOn = (e) => {
+    /**
+     * Toggle on the post-it resize
+     * @param event {MouseEvent}
+     */
+    resizeToggleOn = event => {
         this.postIt.classList.add('resize')
-        this.xOffset = this.x + this.width - e.clientX
-        this.yOffset = this.y + this.height - e.clientY
+        this.xOffset = this.x + this.width - event.clientX
+        this.yOffset = this.y + this.height - event.clientY
         this.board.resize = this
     }
 
-    resizeToggleOff = (e) => {
+    /**
+     * Toggle off the post-it resize
+     */
+    resizeToggleOff = () => {
         this.postIt.classList.remove('resize')
         this.board.resize = undefined
         this.board.save()
