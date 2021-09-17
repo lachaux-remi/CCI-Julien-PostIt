@@ -66,12 +66,9 @@ class PostItBoard {
                     .sort((a, b) => a.index - b.index)
                     .map( postIt => {
                         return {
-                            x: postIt.x,
-                            y: postIt.y,
-                            width: postIt.width,
-                            height: postIt.height,
-                            color: postIt.color,
-                            text: postIt.text
+                            x: postIt.x, y: postIt.y,
+                            width: postIt.width, height: postIt.height,
+                            color: postIt.color, text: postIt.text
                         }
                     } )
             )
@@ -112,7 +109,6 @@ class PostItBoard {
  * Post-it Class
  */
 class PostIt {
-
     /**
      * Constructor for the post-it
      * @param board {PostItBoard} Post-it board
@@ -157,7 +153,7 @@ class PostIt {
         style.left = this.x + 'px'
         style.width = this.width + 'px'
         style.height = this.height + 'px'
-        style.zIndex = this.index
+        style.zIndex = this.index.toString()
 
         this.board.postItElement.append(this.postIt)
 
@@ -193,24 +189,24 @@ class PostIt {
         // layer event
         const layerUpElement = document.createElement('i')
         layerUpElement.classList.add('fas', 'fa-level-up-alt')
-        layerUpElement.addEventListener('click', (e) => {
+        layerUpElement.addEventListener('click', e => {
             e.preventDefault()
             this.index++
-            this.postIt.style.zIndex = this.index
+            this.postIt.style.zIndex = this.index.toString()
         })
         const layerDownElement = document.createElement('i')
         layerDownElement.classList.add('fas', 'fa-level-down-alt')
-        layerDownElement.addEventListener('click', (e) => {
+        layerDownElement.addEventListener('click', e => {
             e.preventDefault()
             this.index--
             if (this.index < 0) this.index = 0
-            this.postIt.style.zIndex = this.index
+            this.postIt.style.zIndex = this.index.toString()
         })
 
         // Color selection
         const colorElement = document.createElement('div')
         colorElement.classList.add('btn-color')
-        colorElement.addEventListener('click', (e) => {
+        colorElement.addEventListener('click', e => {
             e.preventDefault()
 
             switch (this.color) {
